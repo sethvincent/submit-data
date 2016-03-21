@@ -1,8 +1,7 @@
-var createElement = require('bel').createElement
 var defaults = require('json-schema-defaults')
+var el = require('yo-yo')
+
 var schema = require('./schema')
-var hyperx = require('hyperx')
-var hx = hyperx(createElement)
 
 module.exports = function renderForm (state) {
   var obj = defaults(schema)
@@ -11,7 +10,7 @@ module.exports = function renderForm (state) {
   function field (key) {
     var value = obj[key] ? obj[key] : ''
 
-    return hx`
+    return el`
       <div class="field">
         <label for="${key}">${key}</label><br>
         <input name=${key} class="field-text" type="text" value=${value}>
@@ -19,11 +18,11 @@ module.exports = function renderForm (state) {
     `
   }
 
-  return hx`
+  return el`
     <div class="form">
       <form onsubmit=${state.onsubmit}>
         ${keys.map(field)}
-        <input type="submit" class="button" value="Send item">
+        <input type="submit" class="button" value="Save item">
       </form>
     </div>
   `

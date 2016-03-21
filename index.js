@@ -4,8 +4,7 @@ var serialize = require('form-serialize')
 var cookie = require('cookie-cutter')
 var morphdom = require('morphdom')
 var extend = require('xtend')
-var hyperx = require('hyperx')
-var bel = require('bel')
+var el = require('yo-yo')
 
 var formUI = require('./form')
 var createAuthUI = require('./github-auth')
@@ -15,8 +14,6 @@ var data = require('./data.json')
 var modify = require('./modify-state')
 
 var token = cookie.get(config.site.slug)
-var createElement = bel.createElement
-var hx = hyperx(createElement)
 
 var auth = createAuth({
   githubSecretKeeper: config.proxy,
@@ -33,6 +30,7 @@ var authUI = createAuthUI(config, {
 
 if (token) {
   auth.getProfile(token, function (err, profile) {
+    if (err) return store({ type: 'error', error: err })
     store({ type: 'user:login', profile: profile, token: token })
   })
 } else if (auth.getCode()) {
@@ -77,7 +75,7 @@ function form (state) {
     }
   })
 
-  return hx`
+  return el`
     <div class="form">
       <h1>Submit a new item</h1>
       ${formUI(opts)}
@@ -88,9 +86,9 @@ function form (state) {
 function content (state) {
   var elements = state.user
     ? form(state)
-    : hx`<h1>Wait. Who are you?</h1>`
+    : el`<h1>Wait. Who are you?</h1>`
 
-  return hx`
+  return el`
     <main class="site-content" role="main">
       <div class="container">
         ${elements}
@@ -100,7 +98,7 @@ function content (state) {
 }
 
 function header (state) {
-  return hx`
+  return el`
     <header class="app-header">
       <div class="container">
         <h1 class="app-title">${state.site.title}</h1>
@@ -111,7 +109,7 @@ function header (state) {
 }
 
 function layout (state) {
-  return hx`
+  return el`
     <div id="app">
       ${header(state)}
       ${content(state)}
