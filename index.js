@@ -2,7 +2,6 @@ var createAuth = require('github-static-auth')
 var createStore = require('store-emitter')
 var serialize = require('form-serialize')
 var cookie = require('cookie-cutter')
-var morphdom = require('morphdom')
 var extend = require('xtend')
 var el = require('yo-yo')
 
@@ -56,7 +55,7 @@ var store = createStore(modify, {
 })
 
 store.on('*', function (action, state) {
-  morphdom(document.getElementById('app'), render(state))
+  el.update(document.getElementById('app'), render(state))
 })
 
 function render (state) {
