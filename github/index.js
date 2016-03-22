@@ -5,5 +5,6 @@ module.exports = {
   forkAndBranch: require('./fork-and-branch'),
   latestCommit: require('./latest-commit'),
   createCommit: require('./commit-create'),
-  getBlob: require('./blob-get')
+  getBlob: require('./blob-get'),
+  updateBlob: require('./blob-update')
 }

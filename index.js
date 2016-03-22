@@ -73,9 +73,55 @@ function form (state) {
     var fields = serialize(e.target, { hash: true, empty: true })
     store({ type: 'form:submit', fields: fields })
     var opts = { github: state.github, token: state.user.token, user: state.user.profile.login }
-    github.forkAndBranch(opts, function (err, res) {
-      
-    })
+    github.forkAndBranch(opts, getBranch)
+
+    function getBranch (err, fork, branch) {
+      if (err) return store({ type: 'error', error: err })
+
+      var opts = {
+        github: { owner: fork.owner.login, repo: state.github.repo },
+        token: state.user.token,
+        ref: branch.ref,
+        path: state.site.data
+      }
+
+      github.getBlob(opts, writeBlob)
+
+      function writeBlob (err, res, file) {
+        if (err) return store({ type: 'error', error: err })
+        file.push(fields)
+
+        var opts = {
+          github: { owner: fork.owner.login, repo: state.github.repo },
+          token: state.user.token,
+          ref: branch.ref,
+          path: state.site.data,
+          content: JSON.stringify(file),
+          sha: res.sha,
+          branch: branch.ref.split('/')[2],
+          message: 'Updated ' + state.site.data
+        }
+
+        github.updateBlob(opts, pullRequest)
+      }
+
+      function pullRequest (err, res) {
+
+        if (err) return store({ type: 'error', error: err })
+        var opts = {
+          github: state.github,
+          user: state.user.profile.login,
+          token: state.user.token,
+          title: 'Add new item to ' + state.site.data,
+          head: branch.ref,
+          base: state.github.branch
+        }
+
+        github.createPullRequest(opts, function (err, res) {
+          console.log('createPullRequest results:', err, res)
+        })
+      }
+    }
   }
 
   return el`
