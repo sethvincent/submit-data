@@ -3,7 +3,7 @@ var el = require('yo-yo')
 
 var schema = require('./schema')
 
-module.exports = function renderForm (state) {
+module.exports = function renderForm (state, actions) {
   var obj = defaults(schema)
   var keys = Object.keys(obj)
 
@@ -20,7 +20,7 @@ module.exports = function renderForm (state) {
 
   return el`
     <div class="form">
-      <form onsubmit=${state.onsubmit}>
+      <form onsubmit=${actions.onsubmit}>
         ${keys.map(field)}
         <input type="submit" class="button" value="Save item">
       </form>

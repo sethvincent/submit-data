@@ -5,13 +5,13 @@ var cookie = require('cookie-cutter')
 var extend = require('xtend')
 var el = require('yo-yo')
 
-var formUI = require('./form')
-var github = require('./github')
-var createAuthUI = github.auth
-
 var config = require('./config')
 var data = require('./data.json')
 var modify = require('./modify-state')
+var github = require('./github')
+
+var formUI = require('./form')
+var createAuthUI = require('./elements/auth')
 
 var token = cookie.get(config.site.slug)
 
@@ -38,7 +38,6 @@ if (token) {
     if (err) return store({ type: 'error', error: err })
     store({ type: 'user:login', profile: profile, token: token })
     cookie.set(config.site.slug, token)
-    
     window.location = window.location.origin
   })
 }
@@ -68,40 +67,21 @@ function render (state) {
 document.body.appendChild(render(store.initialState()))
 store({ type: 'loading:complete' })
 
-// tmp
-
-function forkUI (state) {
-  function listForks () {
-    console.log('user', state.user)
-    github.forkAndBranch({
-      github: state.github,
-      token: state.user.token
-    }, function (err, res) {
-      console.log(err, res)
+function form (state) {
+  function onsubmit (e) {
+    e.preventDefault()
+    var fields = serialize(e.target, { hash: true, empty: true })
+    store({ type: 'form:submit', fields: fields })
+    var opts = { github: state.github, token: state.user.token, user: state.user.profile.login }
+    github.forkAndBranch(opts, function (err, res) {
+      
     })
   }
 
   return el`
-    <button onclick=${listForks}>Fork & Branch (temporary test button)</button>
-  `
-}
-
-// end tmp
-
-function form (state) {
-  var opts = extend(state, {
-    onsubmit: function (e) {
-      e.preventDefault()
-      var fields = serialize(e.target, { hash: true, empty: true })
-      store({ type: 'form:submit', fields: fields })
-    }
-  })
-
-  return el`
     <div class="form">
-      ${forkUI(state)}
       <h1>Submit a new item</h1>
-      ${formUI(opts)}
+      ${formUI(state, { onsubmit: onsubmit })}
     </div>
   `
 }

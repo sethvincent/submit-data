@@ -1,6 +1,6 @@
 var el = require('yo-yo')
 
-module.exports = function virtualGithubAuth (config, actions) {
+module.exports = function githubAuth (config, actions) {
   var url = 'https://github.com/login/oauth/authorize' +
     '?client_id=' + config.client_id +
     '&scope=' + config.scope +

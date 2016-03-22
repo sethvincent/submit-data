@@ -1,5 +1,6 @@
 var request = require('xhr')
 var list = require('./fork-list')
+var createFork = require('./fork-create')
 var createBranch = require('./branch-create')
 var getCommit = require('./latest-commit')
 
@@ -14,9 +15,35 @@ module.exports = function forkAndBranch (options, callback) {
   })
 
   function findFork (err, forks) {
-    console.log('forks', err, forks)
     if (err) return callback(err)
-    // if found, create a branch on that fork
-    createBranch(options, callback)
+
+    var fork = forks.filter(function (f) {
+      return f.owner.login === options.user
+    })
+
+    if (fork && fork[0]) {
+      fork = fork[0]
+      createBranch({
+        github: { owner: options.user, repo: options.github.repo },
+        commit: options.commit,
+        token: options.token
+      }, function (err, res) {
+        if (err) return callback(err)
+        callback(null, fork, res)
+      })
+    } else {
+      createFork(options, function (err, forkResponse) {
+        if (err) return callback(err)
+        fork = forkResponse
+        createBranch({
+          github: { owner: fork.owner.login, repo: options.github.repo },
+          commit: options.commit,
+          token: options.token
+        }, function (err, res) {
+          if (err) return callback(err)
+          callback(null, fork, res)
+        })
+      })
+    }
   }
 }

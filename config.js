@@ -12,7 +12,8 @@ var config = {
     site: {
       title: 'Submit Data',
       description: 'Submit a row to a csv/json file in a GitHub repo',
-      slug: 'submit-data'
+      slug: 'submit-data',
+      data: 'data.json'
     }
   },
   production: {}
