@@ -19,7 +19,7 @@ var config = {
   },
   production: {
     client_id: 'e726b293f8f60b2e7170',
-    redirect_uri: 'http://about.editdata.org/submit-data',
+    redirect_uri: 'http://submitdata.surge.sh',
     proxy: 'https://submit-data-demo.herokuapp.com',
     scope: 'repo',
     github: {
@@ -561,26 +561,12 @@ var authUI = createAuthUI(config, {
   }
 })
 
-if (token) {
-  auth.getProfile(token, function (err, profile) {
-    if (err) return store({ type: 'error', error: err })
-    store({ type: 'user:login', profile: profile, token: token })
-  })
-} else if (auth.getCode()) {
-  auth.login(function (err, profile, token) {
-    if (err) return store({ type: 'error', error: err })
-    store({ type: 'user:login', profile: profile, token: token })
-    cookie.set(config.site.slug, token)
-    window.location = config.redirect_uri
-  })
-}
-
 var store = createStore(modify, {
   site: config.site,
   github: config.github,
   data: data,
+  submitted: false,
   loading: true,
-  requesting: false,
   flash: null,
   modal: null,
   user: null,
@@ -598,11 +584,29 @@ function render (state) {
 }
 
 document.body.appendChild(render(store.initialState()))
-store({ type: 'loading:complete' })
+
+if (token) {
+  auth.getProfile(token, function (err, profile) {
+    if (err) return store({ type: 'error', error: err })
+    store({ type: 'loading:complete' })
+    store({ type: 'user:login', profile: profile, token: token })
+  })
+} else if (auth.getCode()) {
+  auth.login(function (err, profile, token) {
+    if (err) return store({ type: 'error', error: err })
+    store({ type: 'loading:complete' })
+    store({ type: 'user:login', profile: profile, token: token })
+    cookie.set(config.site.slug, token)
+    window.location = config.redirect_uri
+  })
+} else {
+  store({ type: 'loading:complete' })
+}
 
 function form (state) {
   function onsubmit (e) {
     e.preventDefault()
+    store({ type: 'loading' })
     var fields = serialize(e.target, { hash: true, empty: true })
     store({ type: 'form:submit', fields: fields })
     var opts = { github: state.github, token: state.user.token, user: state.user.profile.login }
@@ -651,7 +655,13 @@ function form (state) {
         }
 
         github.createPullRequest(opts, function (err, res) {
-          console.log('createPullRequest results:', err, res)
+          store({ type: 'loading:complete' })
+          store({
+            type: 'submitted',
+            fork: fork,
+            branch: branch,
+            pullRequest: res
+          })
         })
       }
     }
@@ -696,9 +706,11 @@ appendChild(bel1, ["\n      ",bel0,"\n      ",arguments[0],"\n    "])
 }
 
 function content (state) {
-  var elements = state.user
-    ? form(state)
-    : landing(state)
+  var elements
+  if (state.loading) elements = loading(state)
+  else if (state.user && state.submitted) elements = thanks(state)
+  else if (state.user) elements = form(state)
+  else elements = landing(state)
 
   return (function () {
           function appendChild (el, childs) {
@@ -739,6 +751,105 @@ appendChild(bel0, ["\n        ",arguments[0],"\n      "])
 appendChild(bel1, ["\n      ",bel0,"\n  "])
           return bel1
         }(elements))
+}
+
+function loading (state) {
+  return (function () {
+          function appendChild (el, childs) {
+            if (!Array.isArray(childs)) return
+            for (var i = 0; i < childs.length; i++) {
+              var node = childs[i];
+              if (Array.isArray(node)) {
+                appendChild(el, node)
+                continue
+              }
+              if (typeof node === "number" ||
+                typeof node === "boolean" ||
+                node instanceof Date ||
+                node instanceof RegExp) {
+                node = node.toString()
+              }
+
+              if (typeof node === "string") {
+                if (el.lastChild && el.lastChild.nodeName === "#text") {
+                  el.lastChild.nodeValue += node
+                  continue
+                }
+                node = document.createTextNode(node)
+              }
+
+              if (node && node.nodeType) {
+                el.appendChild(node)
+              }
+            }
+          }
+          var bel1 = document.createElement("div")
+bel1.setAttribute("style", "-webkit-transform:scale(0.3)")
+bel1.setAttribute("class", "loading uil-reload-css")
+var bel0 = document.createElement("div")
+appendChild(bel1, [bel0])
+          return bel1
+        }())
+}
+
+function thanks (state) {
+  console.log('thanks state', state)
+  return (function () {
+          function appendChild (el, childs) {
+            if (!Array.isArray(childs)) return
+            for (var i = 0; i < childs.length; i++) {
+              var node = childs[i];
+              if (Array.isArray(node)) {
+                appendChild(el, node)
+                continue
+              }
+              if (typeof node === "number" ||
+                typeof node === "boolean" ||
+                node instanceof Date ||
+                node instanceof RegExp) {
+                node = node.toString()
+              }
+
+              if (typeof node === "string") {
+                if (el.lastChild && el.lastChild.nodeName === "#text") {
+                  el.lastChild.nodeValue += node
+                  continue
+                }
+                node = document.createTextNode(node)
+              }
+
+              if (node && node.nodeType) {
+                el.appendChild(node)
+              }
+            }
+          }
+          var bel9 = document.createElement("div")
+bel9.setAttribute("class", "thanks")
+var bel0 = document.createElement("h1")
+appendChild(bel0, ["Thanks for your submission!"])
+var bel2 = document.createElement("p")
+var bel1 = document.createElement("a")
+bel1.setAttribute("href", arguments[0])
+appendChild(bel1, ["#",arguments[1]," - ",arguments[2]])
+appendChild(bel2, ["Your pull request: ",bel1])
+var bel4 = document.createElement("p")
+var bel3 = document.createElement("a")
+bel3.setAttribute("href", arguments[3])
+appendChild(bel3, [arguments[4]])
+appendChild(bel4, ["Your fork: ",bel3])
+var bel6 = document.createElement("p")
+var bel5 = document.createElement("a")
+bel5.setAttribute("href", "http://github.com/editdata/submit-data")
+appendChild(bel5, ["submit-data"])
+appendChild(bel6, ["More about this project: ",bel5])
+var bel8 = document.createElement("p")
+var bel7 = document.createElement("a")
+bel7.setAttribute("href", "http://about.editdata.org")
+appendChild(bel7, ["about.editdata.org"])
+appendChild(bel8, ["More about EditData: ",bel7])
+appendChild(bel9, ["\n      ",bel0,"\n      ",bel2,"\n      ",bel4,"\n      ",bel6,"\n      ",bel8,"\n    "])
+          return bel9
+        }(state.pullRequest.html_url,state.pullRequest.number,state.pullRequest.title,state.fork.html_url,state.fork.full_name))
 }
 
 function landing (state) {
@@ -877,6 +988,9 @@ appendChild(bel0, ["\n      ",arguments[0],"\n      ",arguments[1],"\n    "])
 var extend = require('xtend')
 
 var modifiers = {
+  'loading': function (action, state) {
+    return extend(state, { loading: true })
+  },
   'loading:complete': function (action, state) {
     return extend(state, { loading: false })
   },
@@ -898,6 +1012,14 @@ var modifiers = {
     return extend(state, {
       item: item,
       data: data
+    })
+  },
+  'submitted': function (action, state) {
+    return extend(state, {
+      submitted: true,
+      fork: action.fork,
+      branch: action.branch,
+      pullRequest: action.pullRequest
     })
   },
   'error': function (action, state) {

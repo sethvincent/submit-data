@@ -1,6 +1,9 @@
 var extend = require('xtend')
 
 var modifiers = {
+  'loading': function (action, state) {
+    return extend(state, { loading: true })
+  },
   'loading:complete': function (action, state) {
     return extend(state, { loading: false })
   },
@@ -22,6 +25,14 @@ var modifiers = {
     return extend(state, {
       item: item,
       data: data
+    })
+  },
+  'submitted': function (action, state) {
+    return extend(state, {
+      submitted: true,
+      fork: action.fork,
+      branch: action.branch,
+      pullRequest: action.pullRequest
     })
   },
   'error': function (action, state) {

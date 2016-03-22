@@ -28,26 +28,12 @@ var authUI = createAuthUI(config, {
   }
 })
 
-if (token) {
-  auth.getProfile(token, function (err, profile) {
-    if (err) return store({ type: 'error', error: err })
-    store({ type: 'user:login', profile: profile, token: token })
-  })
-} else if (auth.getCode()) {
-  auth.login(function (err, profile, token) {
-    if (err) return store({ type: 'error', error: err })
-    store({ type: 'user:login', profile: profile, token: token })
-    cookie.set(config.site.slug, token)
-    window.location = config.redirect_uri
-  })
-}
-
 var store = createStore(modify, {
   site: config.site,
   github: config.github,
   data: data,
+  submitted: false,
   loading: true,
-  requesting: false,
   flash: null,
   modal: null,
   user: null,
@@ -65,11 +51,29 @@ function render (state) {
 }
 
 document.body.appendChild(render(store.initialState()))
-store({ type: 'loading:complete' })
+
+if (token) {
+  auth.getProfile(token, function (err, profile) {
+    if (err) return store({ type: 'error', error: err })
+    store({ type: 'loading:complete' })
+    store({ type: 'user:login', profile: profile, token: token })
+  })
+} else if (auth.getCode()) {
+  auth.login(function (err, profile, token) {
+    if (err) return store({ type: 'error', error: err })
+    store({ type: 'loading:complete' })
+    store({ type: 'user:login', profile: profile, token: token })
+    cookie.set(config.site.slug, token)
+    window.location = config.redirect_uri
+  })
+} else {
+  store({ type: 'loading:complete' })
+}
 
 function form (state) {
   function onsubmit (e) {
     e.preventDefault()
+    store({ type: 'loading' })
     var fields = serialize(e.target, { hash: true, empty: true })
     store({ type: 'form:submit', fields: fields })
     var opts = { github: state.github, token: state.user.token, user: state.user.profile.login }
@@ -118,7 +122,13 @@ function form (state) {
         }
 
         github.createPullRequest(opts, function (err, res) {
-          console.log('createPullRequest results:', err, res)
+          store({ type: 'loading:complete' })
+          store({
+            type: 'submitted',
+            fork: fork,
+            branch: branch,
+            pullRequest: res
+          })
         })
       }
     }
@@ -133,9 +143,11 @@ function form (state) {
 }
 
 function content (state) {
-  var elements = state.user
-    ? form(state)
-    : landing(state)
+  var elements
+  if (state.loading) elements = loading(state)
+  else if (state.user && state.submitted) elements = thanks(state)
+  else if (state.user) elements = form(state)
+  else elements = landing(state)
 
   return el`
     <main class="site-content" role="main">
@@ -143,6 +155,25 @@ function content (state) {
         ${elements}
       </div<
     </main>
+  `
+}
+
+function loading (state) {
+  return el`
+    <div class="loading uil-reload-css" style="-webkit-transform:scale(0.3)"><div></div></div>
+  `
+}
+
+function thanks (state) {
+  console.log('thanks state', state)
+  return el`
+    <div class="thanks">
+      <h1>Thanks for your submission!</h1>
+      <p>Your pull request: <a href="${state.pullRequest.html_url}">#${state.pullRequest.number} - ${state.pullRequest.title}</a></p>
+      <p>Your fork: <a href="${state.fork.html_url}">${state.fork.full_name}</a></p>
+      <p>More about this project: <a href="http://github.com/editdata/submit-data">submit-data</a></p>
+      <p>More about EditData: <a href="http://about.editdata.org">about.editdata.org</a></p>
+    </div>
   `
 }
 

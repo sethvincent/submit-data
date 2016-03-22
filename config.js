@@ -18,7 +18,7 @@ var config = {
   },
   production: {
     client_id: 'e726b293f8f60b2e7170',
-    redirect_uri: 'http://about.editdata.org/submit-data',
+    redirect_uri: 'http://submitdata.surge.sh',
     proxy: 'https://submit-data-demo.herokuapp.com',
     scope: 'repo',
     github: {

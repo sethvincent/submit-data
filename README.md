@@ -1,6 +1,6 @@
 # submit-data
 
-This is a work-in-progress demo: [about.editdata.org/submit-data](http://about.editdata.org/submit-data)
+This is a work-in-progress demo: [submitdata.surge.sh](http://submitdata.surge.sh)
 
 ## Submit data to a JSON file via a form using the GitHub API
 
