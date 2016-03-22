@@ -38,7 +38,7 @@ if (token) {
     if (err) return store({ type: 'error', error: err })
     store({ type: 'user:login', profile: profile, token: token })
     cookie.set(config.site.slug, token)
-    window.location = window.location.origin
+    window.location = config.redirect_uri
   })
 }
 
