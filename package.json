@@ -6,7 +6,7 @@
   "scripts": {
     "test": "standard && tape tests/*.js | tap-spec",
     "bundle": "browserify index.js -t yo-yoify -o bundle.js",
-    "start": "budo index.js --live --css style.css"
+    "start": "budo index.js:bundle.js --live --css style.css"
   },
   "repository": {
     "type": "git",
