@@ -12,7 +12,7 @@ var config = {
     site: {
       title: 'Submit Data',
       description: 'Submit a row to a csv/json file in a GitHub repo',
-      slug: 'submit-data',
+      slug: 'submit-data-dev-site',
       data: 'data.json'
     }
   },
@@ -29,7 +29,7 @@ var config = {
     site: {
       title: 'Submit Data',
       description: 'Submit a row to a csv/json file in a GitHub repo',
-      slug: 'submit-data',
+      slug: 'submit-data-demo-site',
       data: 'data.json'
     }
   }
