@@ -1,5 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (process){
 var config = {
   development: {
     client_id: '3399f4b75617c8ca5876',
@@ -37,11 +36,10 @@ var config = {
   }
 }
 
-var env = process.env.NODE_ENV || 'development'
+var env = "production" || 'development'
 module.exports = config[env]
 
-}).call(this,require('_process'))
-},{"_process":37}],2:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 module.exports=[
   {
     "title": "example",
@@ -196,7 +194,7 @@ appendChild(bel0, [arguments[1]])
   }
 }
 
-},{"yo-yo":47}],4:[function(require,module,exports){
+},{"yo-yo":46}],4:[function(require,module,exports){
 var defaults = require('json-schema-defaults')
 var el = require('yo-yo')
 
@@ -298,7 +296,7 @@ appendChild(bel2, ["\n      ",bel1,"\n    "])
         }(actions.onsubmit,keys.map(field)))
 }
 
-},{"./schema":49,"json-schema-defaults":31,"yo-yo":47}],5:[function(require,module,exports){
+},{"./schema":48,"json-schema-defaults":31,"yo-yo":46}],5:[function(require,module,exports){
 var request = require('xhr')
 
 module.exports = function getBlob (options, callback) {
@@ -318,7 +316,7 @@ module.exports = function getBlob (options, callback) {
   })
 }
 
-},{"xhr":44}],6:[function(require,module,exports){
+},{"xhr":43}],6:[function(require,module,exports){
 var request = require('xhr')
 var base64 = require('base-64')
 var utf8 = require('utf8')
@@ -350,7 +348,7 @@ module.exports = function updateBlob (options, callback) {
   })
 }
 
-},{"base-64":17,"utf8":43,"xhr":44}],7:[function(require,module,exports){
+},{"base-64":17,"utf8":42,"xhr":43}],7:[function(require,module,exports){
 var request = require('xhr')
 var moment = require('moment')
 
@@ -372,7 +370,7 @@ module.exports = function createBranch (options, callback) {
   })
 }
 
-},{"moment":33,"xhr":44}],8:[function(require,module,exports){
+},{"moment":33,"xhr":43}],8:[function(require,module,exports){
 var request = require('xhr')
 
 module.exports = function fork (options, callback) {
@@ -392,7 +390,7 @@ module.exports = function fork (options, callback) {
   })
 }
 
-},{"xhr":44}],9:[function(require,module,exports){
+},{"xhr":43}],9:[function(require,module,exports){
 var request = require('xhr')
 var list = require('./fork-list')
 var createFork = require('./fork-create')
@@ -443,7 +441,7 @@ module.exports = function forkAndBranch (options, callback) {
   }
 }
 
-},{"./branch-create":7,"./fork-create":10,"./fork-list":11,"./latest-commit":13,"xhr":44}],10:[function(require,module,exports){
+},{"./branch-create":7,"./fork-create":10,"./fork-list":11,"./latest-commit":13,"xhr":43}],10:[function(require,module,exports){
 var request = require('xhr')
 
 module.exports = function fork (options, callback) {
@@ -461,7 +459,7 @@ module.exports = function fork (options, callback) {
   })
 }
 
-},{"xhr":44}],11:[function(require,module,exports){
+},{"xhr":43}],11:[function(require,module,exports){
 var request = require('xhr')
 
 module.exports = function fork (options, callback) {
@@ -478,7 +476,7 @@ module.exports = function fork (options, callback) {
   })
 }
 
-},{"xhr":44}],12:[function(require,module,exports){
+},{"xhr":43}],12:[function(require,module,exports){
 module.exports = {
   createFork: require('./fork-create'),
   listForks: require('./fork-list'),
@@ -508,7 +506,7 @@ module.exports = function fork (options, callback) {
   })
 }
 
-},{"xhr":44}],14:[function(require,module,exports){
+},{"xhr":43}],14:[function(require,module,exports){
 var request = require('xhr')
 
 module.exports = function pullRequest (options, callback) {
@@ -531,7 +529,7 @@ module.exports = function pullRequest (options, callback) {
   })
 }
 
-},{"xhr":44}],15:[function(require,module,exports){
+},{"xhr":43}],15:[function(require,module,exports){
 var createAuth = require('github-static-auth')
 var createStore = require('store-emitter')
 var serialize = require('form-serialize')
@@ -854,7 +852,7 @@ appendChild(bel0, ["\n      ",arguments[0],"\n      ",arguments[1],"\n    "])
         }(header(state),content(state)))
 }
 
-},{"./config":1,"./data.json":2,"./elements/auth":3,"./form":4,"./github":12,"./modify-state":16,"cookie-cutter":20,"form-serialize":22,"github-static-auth":23,"store-emitter":41,"xtend":46,"yo-yo":47}],16:[function(require,module,exports){
+},{"./config":1,"./data.json":2,"./elements/auth":3,"./form":4,"./github":12,"./modify-state":16,"cookie-cutter":20,"form-serialize":22,"github-static-auth":23,"store-emitter":40,"xtend":45,"yo-yo":46}],16:[function(require,module,exports){
 var extend = require('xtend')
 
 var modifiers = {
@@ -896,7 +894,7 @@ module.exports = function modifier (action, state) {
   return newState
 }
 
-},{"xtend":46}],17:[function(require,module,exports){
+},{"xtend":45}],17:[function(require,module,exports){
 (function (global){
 /*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
 ;(function(root) {
@@ -1576,7 +1574,7 @@ module.exports = function (config) {
   return auth
 }
 
-},{"querystring":40,"xhr":44}],24:[function(require,module,exports){
+},{"querystring":39,"xhr":43}],24:[function(require,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
@@ -6482,100 +6480,7 @@ module.exports = function (headers) {
 
   return result
 }
-},{"for-each":21,"trim":42}],37:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],38:[function(require,module,exports){
+},{"for-each":21,"trim":41}],37:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6661,7 +6566,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],39:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -6748,13 +6653,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":38,"./encode":39}],41:[function(require,module,exports){
+},{"./decode":37,"./encode":38}],40:[function(require,module,exports){
 var createEmitter = require('namespace-emitter')
 var isPlainObject = require('is-plain-object')
 var extend = require('xtend')
@@ -6862,7 +6767,7 @@ module.exports = function createStore (modifier, initialState) {
   }
 }
 
-},{"is-plain-object":29,"namespace-emitter":35,"xtend":46}],42:[function(require,module,exports){
+},{"is-plain-object":29,"namespace-emitter":35,"xtend":45}],41:[function(require,module,exports){
 
 exports = module.exports = trim;
 
@@ -6878,7 +6783,7 @@ exports.right = function(str){
   return str.replace(/\s*$/, '');
 };
 
-},{}],43:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/utf8js v2.0.0 by @mathias */
 ;(function(root) {
@@ -7126,7 +7031,7 @@ exports.right = function(str){
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],44:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict";
 var window = require("global/window")
 var once = require("once")
@@ -7347,7 +7252,7 @@ function _createXHR(options) {
 
 function noop() {}
 
-},{"global/window":25,"is-function":28,"once":45,"parse-headers":36,"xtend":46}],45:[function(require,module,exports){
+},{"global/window":25,"is-function":28,"once":44,"parse-headers":36,"xtend":45}],44:[function(require,module,exports){
 module.exports = once
 
 once.proto = once(function () {
@@ -7368,7 +7273,7 @@ function once (fn) {
   }
 }
 
-},{}],46:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
@@ -7389,7 +7294,7 @@ function extend() {
     return target
 }
 
-},{}],47:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 var bel = require('bel') // turns template tag into DOM elements
 var morphdom = require('morphdom') // efficiently diffs + morphs two DOM elements
 var defaultEvents = require('./update-events.js') // default events to be copied when dom elements update
@@ -7420,7 +7325,7 @@ module.exports.update = function (fromNode, toNode, opts) {
   }
 }
 
-},{"./update-events.js":48,"bel":18,"morphdom":34}],48:[function(require,module,exports){
+},{"./update-events.js":47,"bel":18,"morphdom":34}],47:[function(require,module,exports){
 module.exports = [
   // attribute events (can be set with attributes)
   'onclick',
@@ -7457,7 +7362,7 @@ module.exports = [
   'onfocusout'
 ]
 
-},{}],49:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 module.exports = {
   required: true,
   type: 'object',
