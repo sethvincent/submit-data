@@ -6,7 +6,8 @@ var extend = require('xtend')
 var el = require('yo-yo')
 
 var formUI = require('./form')
-var createAuthUI = require('./github-auth')
+var github = require('./github')
+var createAuthUI = github.auth
 
 var config = require('./config')
 var data = require('./data.json')
@@ -37,12 +38,14 @@ if (token) {
     if (err) return store({ type: 'error', error: err })
     store({ type: 'user:login', profile: profile, token: token })
     cookie.set(config.site.slug, token)
+    
     window.location = window.location.origin
   })
 }
 
 var store = createStore(modify, {
   site: config.site,
+  github: config.github,
   data: data,
   loading: true,
   requesting: false,
@@ -65,6 +68,26 @@ function render (state) {
 document.body.appendChild(render(store.initialState()))
 store({ type: 'loading:complete' })
 
+// tmp
+
+function forkUI (state) {
+  function listForks () {
+    console.log('user', state.user)
+    github.forkAndBranch({
+      github: state.github,
+      token: state.user.token
+    }, function (err, res) {
+      console.log(err, res)
+    })
+  }
+
+  return el`
+    <button onclick=${listForks}>Fork & Branch (temporary test button)</button>
+  `
+}
+
+// end tmp
+
 function form (state) {
   var opts = extend(state, {
     onsubmit: function (e) {
@@ -76,6 +99,7 @@ function form (state) {
 
   return el`
     <div class="form">
+      ${forkUI(state)}
       <h1>Submit a new item</h1>
       ${formUI(opts)}
     </div>

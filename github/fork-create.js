@@ -1,9 +1,10 @@
 var request = require('xhr')
 
-module.exports = function pullRequest (options, callback) {
+module.exports = function fork (options, callback) {
   var requestOptions = {
-    // todo: url: 'https://api.github.com/repos/' + options.owner + '/' + options.repo + '/contents/' + options.path,
+    url: 'https://api.github.com/repos/' + options.github.owner + '/' + options.github.repo + '/forks',
     headers: { authorization: 'token ' + options.token },
+    method: 'POST',
     json: true
   }
 
