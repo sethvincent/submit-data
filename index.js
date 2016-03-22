@@ -135,7 +135,7 @@ function form (state) {
 function content (state) {
   var elements = state.user
     ? form(state)
-    : el`<h1>Wait. Who are you?</h1>`
+    : landing(state)
 
   return el`
     <main class="site-content" role="main">
@@ -143,6 +143,22 @@ function content (state) {
         ${elements}
       </div<
     </main>
+  `
+}
+
+function landing (state) {
+  var url = 'https://github.com/login/oauth/authorize' +
+    '?client_id=' + config.client_id +
+    '&scope=' + config.scope +
+    '&redirect_uri=' + config.redirect_uri
+
+  return el`
+    <div class="landing">
+      <h1>Create a pull request via the GitHub API</h1>
+      <h2>Log in to add an item to a JSON file by filling out a form!</h1>
+      <p>This site will create a fork of this repo on your account, create a branch for your submission, save your submission, then create a pull request on the source repository.</p>
+      <a href="${url}" class="profile-login button">Sign in with GitHub</a>
+    </div>
   `
 }
 
