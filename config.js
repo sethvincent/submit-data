@@ -7,7 +7,7 @@ var config = {
     github: {
       owner: 'editdata',
       repo: 'submit-data',
-      branch: 'master'
+      branch: 'gh-pages'
     },
     site: {
       title: 'Submit Data',
@@ -24,7 +24,7 @@ var config = {
     github: {
       owner: 'editdata',
       repo: 'submit-data',
-      branch: 'master'
+      branch: 'gh-pages'
     },
     site: {
       title: 'Submit Data',
