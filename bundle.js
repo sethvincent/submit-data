@@ -13,7 +13,7 @@ var config = {
     site: {
       title: 'Submit Data',
       description: 'Submit a row to a csv/json file in a GitHub repo',
-      slug: 'submit-data',
+      slug: 'submit-data-dev-site',
       data: 'data.json'
     }
   },
@@ -30,7 +30,7 @@ var config = {
     site: {
       title: 'Submit Data',
       description: 'Submit a row to a csv/json file in a GitHub repo',
-      slug: 'submit-data',
+      slug: 'submit-data-demo-site',
       data: 'data.json'
     }
   }
@@ -236,20 +236,19 @@ module.exports = function renderForm (state, actions) {
               }
             }
           }
-          var bel3 = document.createElement("div")
-bel3.setAttribute("class", "field")
+          var bel2 = document.createElement("div")
+bel2.setAttribute("class", "field")
 var bel0 = document.createElement("label")
 bel0.setAttribute("htmlFor", arguments[0])
 appendChild(bel0, [arguments[1]])
-var bel1 = document.createElement("br")
-var bel2 = document.createElement("input")
-bel2.setAttribute("name", arguments[2])
-bel2.setAttribute("type", "text")
-bel2.setAttribute("value", arguments[3])
-bel2.setAttribute("class", "field-text")
-appendChild(bel2, ["\n      "])
-appendChild(bel3, ["\n        ",bel0,bel1,"\n        ",bel2,"\n    "])
-          return bel3
+var bel1 = document.createElement("input")
+bel1.setAttribute("name", arguments[2])
+bel1.setAttribute("type", "text")
+bel1.setAttribute("value", arguments[3])
+bel1.setAttribute("class", "field-text")
+appendChild(bel1, ["\n      "])
+appendChild(bel2, ["\n        ",bel0,"\n        ",bel1,"\n    "])
+          return bel2
         }(key,key,key,value))
   }
 
@@ -282,17 +281,19 @@ appendChild(bel3, ["\n        ",bel0,bel1,"\n        ",bel2,"\n    "])
               }
             }
           }
-          var bel2 = document.createElement("div")
-bel2.setAttribute("class", "form")
-var bel1 = document.createElement("form")
-bel1["onsubmit"] = arguments[0]
-var bel0 = document.createElement("input")
-bel0.setAttribute("type", "submit")
-bel0.setAttribute("value", "Save item")
-bel0.setAttribute("class", "button")
-appendChild(bel1, ["\n        ",arguments[1],"\n        ",bel0,"\n      "])
-appendChild(bel2, ["\n      ",bel1,"\n    "])
-          return bel2
+          var bel3 = document.createElement("div")
+bel3.setAttribute("class", "form")
+var bel0 = document.createElement("p")
+appendChild(bel0, ["This site will create a fork of this repo on your account, create a branch for your submission, save your submission, then create a pull request on the source repository."])
+var bel2 = document.createElement("form")
+bel2["onsubmit"] = arguments[0]
+var bel1 = document.createElement("input")
+bel1.setAttribute("type", "submit")
+bel1.setAttribute("value", "Save item")
+bel1.setAttribute("class", "button")
+appendChild(bel2, ["\n        ",arguments[1],"\n        ",bel1,"\n      "])
+appendChild(bel3, ["\n      ",bel0,"\n      ",bel2,"\n    "])
+          return bel3
         }(actions.onsubmit,keys.map(field)))
 }
 
@@ -570,7 +571,7 @@ if (token) {
     if (err) return store({ type: 'error', error: err })
     store({ type: 'user:login', profile: profile, token: token })
     cookie.set(config.site.slug, token)
-    window.location = window.location.origin
+    window.location = config.redirect_uri
   })
 }
 
@@ -697,39 +698,7 @@ appendChild(bel1, ["\n      ",bel0,"\n      ",arguments[0],"\n    "])
 function content (state) {
   var elements = state.user
     ? form(state)
-    : (function () {
-          function appendChild (el, childs) {
-            if (!Array.isArray(childs)) return
-            for (var i = 0; i < childs.length; i++) {
-              var node = childs[i];
-              if (Array.isArray(node)) {
-                appendChild(el, node)
-                continue
-              }
-              if (typeof node === "number" ||
-                typeof node === "boolean" ||
-                node instanceof Date ||
-                node instanceof RegExp) {
-                node = node.toString()
-              }
-
-              if (typeof node === "string") {
-                if (el.lastChild && el.lastChild.nodeName === "#text") {
-                  el.lastChild.nodeValue += node
-                  continue
-                }
-                node = document.createTextNode(node)
-              }
-
-              if (node && node.nodeType) {
-                el.appendChild(node)
-              }
-            }
-          }
-          var bel0 = document.createElement("h1")
-appendChild(bel0, ["Wait. Who are you?"])
-          return bel0
-        }())
+    : landing(state)
 
   return (function () {
           function appendChild (el, childs) {
@@ -770,6 +739,58 @@ appendChild(bel0, ["\n        ",arguments[0],"\n      "])
 appendChild(bel1, ["\n      ",bel0,"\n  "])
           return bel1
         }(elements))
+}
+
+function landing (state) {
+  var url = 'https://github.com/login/oauth/authorize' +
+    '?client_id=' + config.client_id +
+    '&scope=' + config.scope +
+    '&redirect_uri=' + config.redirect_uri
+
+  return (function () {
+          function appendChild (el, childs) {
+            if (!Array.isArray(childs)) return
+            for (var i = 0; i < childs.length; i++) {
+              var node = childs[i];
+              if (Array.isArray(node)) {
+                appendChild(el, node)
+                continue
+              }
+              if (typeof node === "number" ||
+                typeof node === "boolean" ||
+                node instanceof Date ||
+                node instanceof RegExp) {
+                node = node.toString()
+              }
+
+              if (typeof node === "string") {
+                if (el.lastChild && el.lastChild.nodeName === "#text") {
+                  el.lastChild.nodeValue += node
+                  continue
+                }
+                node = document.createTextNode(node)
+              }
+
+              if (node && node.nodeType) {
+                el.appendChild(node)
+              }
+            }
+          }
+          var bel4 = document.createElement("div")
+bel4.setAttribute("class", "landing")
+var bel0 = document.createElement("h1")
+appendChild(bel0, ["Create a pull request via the GitHub API"])
+var bel1 = document.createElement("h2")
+appendChild(bel1, ["Log in to add an item to a JSON file by filling out a form!"])
+var bel2 = document.createElement("p")
+appendChild(bel2, ["This site will create a fork of this repo on your account, create a branch for your submission, save your submission, then create a pull request on the source repository."])
+var bel3 = document.createElement("a")
+bel3.setAttribute("href", arguments[0])
+bel3.setAttribute("class", "profile-login button")
+appendChild(bel3, ["Sign in with GitHub"])
+appendChild(bel4, ["\n      ",bel0,"\n      ",bel1,"\n      ",bel2,"\n      ",bel3,"\n    "])
+          return bel4
+        }(url))
 }
 
 function header (state) {
